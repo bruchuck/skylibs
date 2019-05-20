@@ -10,7 +10,8 @@ if os.name == 'nt':
 else:
     extra_requires = ['openexr>=1.3.0']
     dependency_links = ['https://github.com/jamesbowman/openexrpython/tarball/master#egg=openexr-1.3.0']
-    package_data = {}
+    package_data = {"sh": ["libsh.cpython-37m-x86_64-linux-gnu.so"],
+                    "tools3d": ["libspharm.cpython-37m-x86_64-linux-gnu.so"]}
 
 setup(
     name='skylibs',
