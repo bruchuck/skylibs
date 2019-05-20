@@ -2,6 +2,8 @@
 __pycache__/
 *.py[co]
 
+*.o
+
 # Distribution / packaging
 .Python
 env/
