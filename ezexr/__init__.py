@@ -11,26 +11,17 @@ float* readEXRfloat(const char filename[], char ***channel_names, int *width, in
 float* writeEXRfloat(const char filename[], const char *channel_names[], const float *data, int width, int height, int nb_channels);
 """
 
-if os.name == 'nt':
-    from cffi import FFI
-    ffi = FFI()
-    ffi.cdef(cffi_def)
-    to_precache = ["libstdc++-6.dll", "libgcc_s_sjlj-1.dll", "libzlib.dll", "libHalf.dll", "libIex-2_2.dll",
-                   "libIlmThread-2_2.dll", "libImath-2_2.dll", "libIlmImf-2_2.dll"]
-    [ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), x)) for x in to_precache]
-    C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "wrapper.dll"))
-else:
-    try:
-        import OpenEXR
-        import Imath
-    except ImportError:
-        if sys.platform == "darwin":
-            from cffi import FFI
-            ffi = FFI()
-            ffi.cdef(cffi_def)
-            C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "wrapper.dylib"))
-        else:
-            raise
+try:
+    import OpenEXR
+    import Imath
+except ImportError:
+    if sys.platform == "darwin":
+        from cffi import FFI
+        ffi = FFI()
+        ffi.cdef(cffi_def)
+        C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "wrapper.dylib"))
+    else:
+        raise
 
 
 def imread_raw_custom_(filename):

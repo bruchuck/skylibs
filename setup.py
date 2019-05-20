@@ -5,16 +5,7 @@ from setuptools import setup
 if os.name == 'nt':
     extra_requires = ['cffi>=1.9.1']
     dependency_links = []
-    package_data = {"ezexr": ["libHalf.dll",
-                              "libIex-2_2.dll",
-                              "libIlmImf-2_2.dll",
-                              "libIlmThread-2_2.dll",
-                              "libImath-2_2.dll",
-                              "libzlib.dll",
-                              "wrapper.dll",
-                              "libgcc_s_sjlj-1.dll",
-                              "libstdc++-6.dll"],
-                    "sh": ["libsh.cp36-win_amd64.pyd"],
+    package_data = {"sh": ["libsh.cp36-win_amd64.pyd"],
                     "tools3d": ["libspharm.cp36-win_amd64.pyd"]}
 else:
     extra_requires = ['openexr>=1.3.0']
