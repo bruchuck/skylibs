@@ -47,7 +47,6 @@ class EnvironmentMap:
     def __init__(self, im, format_=None, copy=True, color=True):
         """
         Creates an EnvironmentMap.
-
         :param im: Image path or data to be converted to an EnvironmentMap, or 
                    the height of an empty EnvironmentMap.
         :param format_: EnvironmentMap format. Can be `Angular`, ...
@@ -122,7 +121,6 @@ class EnvironmentMap:
         """Create an environment map from skybox (cube) captures. Six images
         must be provided, one for each side of the virtual cube. This function
         will return an EnvironmentMap object.
-
         All the images must be square (width==height), have the same size 
         and number of channels.
         """
@@ -258,7 +256,7 @@ class EnvironmentMap:
 
         # In original: valid &= ~isnan(data)...
         # I haven't included it here because it may mask potential problems...
-        if valid is not None:
+        if valid is not None and not np.all(valid):
             self.setBackgroundColor(self.backgroundColor, valid)
 
         return self
@@ -284,12 +282,10 @@ class EnvironmentMap:
     def convertTo(self, targetFormat, targetDim=None):
         """
         Convert to another format.
-
         :param targetFormat: Target format.
         :param targetDim: Target dimension.
         :type targetFormat: string
         :type targetFormat: integer
-
         """
         assert targetFormat.lower() in SUPPORTED_FORMATS, (
             "Unknown format: {}".format(targetFormat))
@@ -309,7 +305,6 @@ class EnvironmentMap:
     def rotate(self, format, input_):
         """
         Rotate the environment map.
-
         :param format: Rotation type
         :param input: Rotation information (currently only 3x3 numpy matrix)
         """
@@ -400,10 +395,8 @@ class EnvironmentMap:
     def project(self, vfov, rotation_matrix, ar=4./3., resolution=(640, 480),
                 projection="perspective", mode="normal"):
         """Perform a projection onto a plane ("_simulates_" a camera).
-
         Note: this function does not modify the foreshortening present in the
         environment map.
-
         :vfov: Vertical Field of View (degrees).
         :rotation_matrix: Camera rotation matrix.
         :ar: Aspect ratio (width / height).

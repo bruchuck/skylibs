@@ -80,7 +80,7 @@ float Pmn(float m, float n, float x)
 //     return pll;
 // }
 
-void generateAssociatedLegendreFactors(const float N, float *data_out, const float *restrict nodes, const unsigned int num_nodes)
+void generateAssociatedLegendreFactors(const float N, float *data_out, const float * nodes, const unsigned int num_nodes)
 {
     unsigned int i, l, m, j = 0;
 

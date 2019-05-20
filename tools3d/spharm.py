@@ -11,6 +11,7 @@ from envmap import EnvironmentMap
 # http://stackoverflow.com/questions/33149777/scipy-spherical-harmonics-imaginary-part
 assert(np.isclose(sph_harm(2, 5, 2.1, 0.4), -0.17931012976432356-0.31877392205957022j))
 
+from libspharm import ffi, lib
 
 # References:
 # https://www.cs.dartmouth.edu/~wjarosz/publications/dissertation/appendixB.pdf
@@ -33,15 +34,15 @@ def FSHT(envmap, degrees=3, reduction_type='right'):
         raise NotImplemented()
 
 
-    from cffi import FFI
-    ffi = FFI()
-    ffi.cdef("""
-        void generateAssociatedLegendreFactors(const float N, float *data_out, const float * nodes, const unsigned int num_nodes);
-    """)
-    if os.name == 'nt':
-        C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.dll"))
-    else:
-        C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.so"))
+    #from cffi import FFI
+    #ffi = FFI()
+    #ffi.cdef("""
+    #    void generateAssociatedLegendreFactors(const float N, float *data_out, const float * nodes, const unsigned int num_nodes);
+    #""")
+    #if os.name == 'nt':
+    #    C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.dll"))
+    #else:
+    #    C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.so"))
 
     envmap.data = envmap.data[...,np.newaxis]
     ch = envmap.data.shape[2]
@@ -126,15 +127,15 @@ def iFSHT(coeffs, envmap_size, envmap_format='latlong', reduction_type='right'):
 
 
 def _getP(envmap, degrees):
-    from cffi import FFI
-    ffi = FFI()
-    ffi.cdef("""
-        void generateAssociatedLegendreFactors(const float N, float *data_out, const float * nodes, const unsigned int num_nodes);
-    """)
-    if os.name == 'nt':
-        C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.dll"))
-    else:
-        C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.so"))
+    #from cffi import FFI
+    #ffi = FFI()
+    #ffi.cdef("""
+    #    void generateAssociatedLegendreFactors(const float N, float *data_out, const float * nodes, const unsigned int num_nodes);
+    #""")
+    #if os.name == 'nt':
+    #    C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.dll"))
+    #else:
+    #    C = ffi.dlopen(os.path.join(os.path.dirname(os.path.realpath(__file__)), "spharm_tools.so"))
 
     x, y, z, valid = envmap.worldCoordinates()
     theta = np.arctan2(x, -z)
@@ -149,7 +150,8 @@ def _getP(envmap, degrees):
 
     data_ptr = ffi.cast("float *", P.ctypes.data)
     nodes_cos_ptr = ffi.cast("float *", nodes_cos.ctypes.data)
-    C.generateAssociatedLegendreFactors(degrees + 1, data_ptr, nodes_cos_ptr, nodes.size)
+    #C.generateAssociatedLegendreFactors(degrees + 1, data_ptr, nodes_cos_ptr, nodes.size)
+    lib.generateAssociatedLegendreFactors(degrees + 1, data_ptr, nodes_cos_ptr, nodes.size)
     P = P.reshape([envmap.data.shape[0], int((2*(degrees + 1)+1)**2/8)])
     print("Done in {:.3f}s".format(time.time() - ts))
 

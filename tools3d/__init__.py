@@ -2,7 +2,7 @@ import numpy as np
 from scipy.sparse import coo_matrix, vstack as sparse_vstack
 from scipy.sparse.linalg import lsqr as sparse_lsqr
 
-
+from . import libspharm
 from . import display
 from . import spharm
 
