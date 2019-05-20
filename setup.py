@@ -13,7 +13,9 @@ if os.name == 'nt':
                               "libzlib.dll",
                               "wrapper.dll",
                               "libgcc_s_sjlj-1.dll",
-                              "libstdc++-6.dll"]}
+                              "libstdc++-6.dll"],
+                    "sh": ["libsh.cp36-win_amd64.pyd"],
+                    "tools3d": ["libspharm.cp36-win_amd64.pyd"]}
 else:
     extra_requires = ['openexr>=1.3.0']
     dependency_links = ['https://github.com/jamesbowman/openexrpython/tarball/master#egg=openexr-1.3.0']
@@ -27,7 +29,7 @@ setup(
     license="LGPLv3",
     url='https://github.com/soravux/skylibs',
     version='0.4.1',
-    packages=['ezexr', 'envmap', 'hdrio', 'hdrtools', 'hdrtools/tonemapping', 'skydb', 'tools3d'],
+    packages=['ezexr', 'envmap', 'hdrio', 'hdrtools', 'hdrtools/tonemapping', 'sh', 'skydb', 'tools3d'],
     package_data=package_data,
     include_package_data=True,
     install_requires=['imageio>=1.6', 'rotlib>=0.91', 'tqdm', 'pyshtools'].extend(extra_requires),
