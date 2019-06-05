@@ -174,3 +174,23 @@ def _create_circular_mask(h, w, center=None, radius=None):
     dist_from_center = np.sqrt((X - center[0])**2 + (Y-center[1])**2)
     mask = dist_from_center <= radius
     return mask
+
+
+def ground_truth_irradiance_map(pan):
+    '''create a irradiance map from the panorama by a diffuse convolution'''
+    size = pan.data.shape[:2]
+    outputDiffuseMap = np.zeros((size[0],size[1],3))
+    
+    solid_angles = pan.solidAngles()
+    world_coords = pan.worldCoordinates()[:3]
+    world_coords[2][:] = -world_coords[2][:]
+
+    def compute(x, y):  
+        dot = np.maximum(0, world_coords[0][x,y]*world_coords[0] + world_coords[1][x,y]*world_coords[1] + world_coords[2][x,y]*world_coords[2])
+        outputDiffuseMap[x, y, :] = [np.sum(dot * pan.data[:,:,c] * solid_angles) / np.pi for c in range(3)]
+    
+    for y in range(size[1]):
+        for x in range(size[0]):
+            compute(x, y)
+
+    return outputDiffuseMap.astype(np.float32)
