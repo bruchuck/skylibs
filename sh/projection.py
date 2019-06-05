@@ -139,3 +139,38 @@ def project(env, degrees):
             for c in range(ch):
                 retval[l**2+col,c] = np.nansum(Ysh*f[:,:,c])
     return retval
+
+def irradiance_map(sh_coeffs, size = (100,200), format='latlong'):
+    '''generate an irradiance map from the sh_coeffs'''
+    pan = envmap.EnvironmentMap(np.ones(size), format_=format)  
+    
+    #invert Z direction
+    world_coords = pan.worldCoordinates()[:3]
+    world_coords[2][:] = - world_coords[2][:]
+    
+    test = [SH[l, m](world_coords) for l in range(3) for m in range(-l, l+1)]
+
+    r = np.sum([test[i] * sh_coeffs[0, i] for i in range(9)])
+    g = np.sum([test[i] * sh_coeffs[1, i] for i in range(9)])
+    b = np.sum([test[i] * sh_coeffs[2, i] for i in range(9)])
+    
+    pan.data = np.stack((r,g,b), axis= 2)
+    
+    if format == 'angular':
+        mask = _create_circular_mask(size[0],size[1])
+        mask = np.stack((mask, mask, mask), axis=2)
+        pan.data = mask * pan.data
+    
+    return pan
+
+
+def _create_circular_mask(h, w, center=None, radius=None):
+    '''utility function to generate circular masks'''
+    if center is None: # use the middle of the image
+        center = [int(w/2), int(h/2)]
+    if radius is None: # use the smallest distance between the center and image walls
+        radius = min(center[0], center[1], w-center[0], h-center[1])
+    Y, X = np.ogrid[:h, :w]
+    dist_from_center = np.sqrt((X - center[0])**2 + (Y-center[1])**2)
+    mask = dist_from_center <= radius
+    return mask
