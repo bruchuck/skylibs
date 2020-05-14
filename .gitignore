@@ -54,3 +54,6 @@ docs/build/
 
 # PyBuilder
 target/
+
+#Editor
+.vscode/
