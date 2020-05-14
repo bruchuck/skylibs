@@ -29,6 +29,7 @@ setup(
     license="LGPLv3",
     url='https://github.com/bdorta/skylibs',
     version='0.5',
+    packages=['ezexr', 'envmap', 'hdrio', 'hdrtools', 'hdrtools/tonemapping', 'sh', 'skydb', 'tools3d'],
     install_requires=['rotlib', 'pyshtools'],
     package_data=package_data,
     include_package_data=True,
