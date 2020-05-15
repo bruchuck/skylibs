@@ -5,7 +5,7 @@ from math import factorial
 
 import time
 import envmap
-from libsh import ffi, lib
+from _libsh import ffi, lib
 from tqdm import tqdm
 from scipy.special import sph_harm
 
