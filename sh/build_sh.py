@@ -10,7 +10,12 @@ ffibuilder.cdef(r"""
                 """)
 
 
+
+
 source_dir = os.path.join(os.getcwd(), "sh", "src")
+
+if(not os.path.exists(source_dir)):
+    source_dir = os.path.join(os.getcwd(), "skylibs", "sh", "src")
 # Here go the sources, most likely only includes and additional functions if necessary
 ffibuilder.set_source("_libsh",
     r"""
@@ -18,8 +23,7 @@ ffibuilder.set_source("_libsh",
     """,
     sources=[os.path.join(source_dir, "sh.c")],
     relative_to=__file__,
-    include_dirs = [source_dir, os.path.join(source_dir, "skylibs")]
-)
+    include_dirs = [source_dir]
 
 
 
