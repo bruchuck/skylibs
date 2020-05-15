@@ -24,6 +24,7 @@ ffibuilder.set_source("_libsh",
     sources=[os.path.join(source_dir, "sh.c")],
     relative_to=__file__,
     include_dirs = [source_dir]
+)
 
 
 
