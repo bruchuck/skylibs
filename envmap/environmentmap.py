@@ -73,6 +73,8 @@ class EnvironmentMap:
         if isinstance(im, str):
             # We received the filename
             self.data = imread(im)
+            # changed
+            self.backgroundColor = np.mean(self.data[:,:,:3], axis=(0,1))
         elif isinstance(im, int):
             # We received a single scalar
             if self.format_ == 'latlong':
@@ -115,6 +117,12 @@ class EnvironmentMap:
         elif self.format_ == 'skylatlong':
             assert 4*self.data.shape[0] == self.data.shape[1], (
                 "SkyLatLong format width should be four times the height")
+
+
+        #fill pure black color with mean color
+        background_mask = np.logical_not(np.any(self.data[:,:,:3], axis = -1))
+        self.data[background_mask] = np.array(list(self.backgroundColor) + [1.0])
+
 
     @classmethod
     def fromSkybox(cls, top, bottom, left, right, front, back):
