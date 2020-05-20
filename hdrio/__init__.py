@@ -26,7 +26,8 @@ def imwrite(data, filename):
     elif ext in ['.hdr', '.pic']:
         _hdr_write(filename, data)
     else:
-        scipy_io.imsave(filename, data)
+        imageio.imwrite(filename, data)
+        #scipy_io.imsave(filename, data)
 
 
 def imsave(filename, data):
@@ -60,7 +61,7 @@ def imread(filename, format_="float32"):
         else:
             im = tiff.imread(filename)
     else:
-        im = scipy_io.imread(filename)
+        im = imageio.imread(filename)
         ldr = True
 
     if format_ == "native":
